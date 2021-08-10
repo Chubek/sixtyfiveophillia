@@ -1,56 +1,56 @@
 package memory
 
-type pointer int
+type Pointer int
 
-type octet [8]int
+type Octet [8]int
 
 type MemoryBlock struct {
-	address   pointer
-	container octet
-	page      int
+	Address   Pointer
+	Container Octet
+	Page      int
 }
 
 type MemoryPage struct {
-	blocks  []MemoryBlock
-	pageNum int
+	Blocks  []MemoryBlock
+	PageNum int
 }
 
 type Stack struct {
-	container    [256]MemoryBlock
-	currentIndex int
+	Container    [256]MemoryBlock
+	CurrentIndex int
 }
 
 func (stack *Stack) PushStack(m MemoryBlock) {
-	stack.container[stack.currentIndex] = m
-	stack.currentIndex += 1
-	if stack.currentIndex == 256 {
-		stack.currentIndex = 0
+	stack.Container[stack.CurrentIndex] = m
+	stack.CurrentIndex += 1
+	if stack.CurrentIndex == 256 {
+		stack.CurrentIndex = 0
 	}
 }
 
 func (stack *Stack) PullStack() (x MemoryBlock) {
-	ret := stack.container[stack.currentIndex]
-	stack.currentIndex -= 1
+	ret := stack.Container[stack.CurrentIndex]
+	stack.CurrentIndex -= 1
 
-	if stack.currentIndex == 0 {
-		stack.currentIndex = 255
+	if stack.CurrentIndex == 0 {
+		stack.CurrentIndex = 255
 	}
 
 	return ret
 }
 
 func (memBlock *MemoryBlock) ArithmeticShiftLeft() {
-	memBlock.container[7] = memBlock.container[0]
+	memBlock.Container[7] = memBlock.Container[0]
 	for i := 1; i < 7; i++ {
-		memBlock.container[i-1] = memBlock.container[i]
+		memBlock.Container[i-1] = memBlock.Container[i]
 	}
 
 }
 
 func (memBlock *MemoryBlock) ArithmeticShiftRight() {
 	for i := 0; i < 6; i++ {
-		memBlock.container[i+1] = memBlock.container[i]
+		memBlock.Container[i+1] = memBlock.Container[i]
 	}
-	memBlock.container[0] = memBlock.container[7]
+	memBlock.Container[0] = memBlock.Container[7]
 
 }
